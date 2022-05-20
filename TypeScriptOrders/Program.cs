@@ -6,6 +6,7 @@
 
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.OpenApi.Models;
+using TypeScriptOrders.Services;
 
 string corsKey = "_myCorsKey";
 string swaggerVersion = "v1";
@@ -15,6 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region -------------------------------------------- ConfigureServices
 builder.Services.AddControllers();
+builder.Services.AddDbContext<NORTHWNDContext>();
+builder.Services.AddScoped<NorthwndService>();
 builder.Services
   .AddEndpointsApiExplorer()
   .AddSwaggerGen(x => x.SwaggerDoc(
