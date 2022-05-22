@@ -1,0 +1,25 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "watch:tsc": "tsc --watch",
+    "watch:app": "live-server",
+    "watch:bundle": "watchify dist/index.js dist/Order.js dist/OrderDetail.js -o dist/app.js",
+    "watch:all": "concurrently npm:watch:tsc npm:watch:app npm:watch:bundle",
+    "bundle": "browserify dist/index.js dist/Order.js dist/OrderDetail.js -o dist/app.js"
+},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.2.0",
+    "jQuery": "^1.7.4",
+    "live-server": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.14",
+    "watchify": "^4.0.0"
+  }
+}

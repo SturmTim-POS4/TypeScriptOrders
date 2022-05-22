@@ -1,0 +1,23 @@
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+h3, h1{
+    text-align: center;
+}
+
+.row{
+    flex-direction: row;
+    display: flex
+}
+.column{
+    margin: 5px;
+    flex-direction: column;
+    display: flex
+}
+.grow{
+    flex-grow: 10;
+}
+.tr-rows:hover{
+    background-color: #ffa500;
+}
