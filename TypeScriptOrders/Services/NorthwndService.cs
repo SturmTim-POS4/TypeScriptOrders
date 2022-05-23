@@ -25,6 +25,11 @@ public class NorthwndService
             .ThenInclude(x => x.Category).AsEnumerable();
     }
     
+    public IEnumerable<Product> GetAllProducts()
+    {
+        return _db.Products.AsEnumerable();
+    }
+    
     public OrderDetail DeleteOrderDetail(OrderDetail orderDetail)
     {
         _db.OrderDetails.Remove(orderDetail);

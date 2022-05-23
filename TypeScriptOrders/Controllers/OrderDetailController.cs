@@ -55,5 +55,6 @@ namespace TypeScriptOrders.Controllers
             deleteOrderDetail.ProductName = orderDetail.Product.ProductName;
             return deleteOrderDetail;
         }
+
     }
 }

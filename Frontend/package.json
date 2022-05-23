@@ -7,9 +7,9 @@
     "tsc": "tsc",
     "watch:tsc": "tsc --watch",
     "watch:app": "live-server",
-    "watch:bundle": "watchify dist/index.js dist/Order.js dist/OrderDetail.js dist/Customer.js -o dist/app.js",
+    "watch:bundle": "watchify dist/index.js dist/Order.js dist/OrderDetail.js dist/Customer.js dist/Product.js -o dist/app.js",
     "watch:all": "concurrently npm:watch:tsc npm:watch:app npm:watch:bundle",
-    "bundle": "browserify dist/index.js dist/Order.js dist/OrderDetail.js dist/Customer.js -o dist/app.js"
+    "bundle": "browserify dist/index.js dist/Order.js dist/OrderDetail.js dist/Customer.js dist/Product.js -o dist/app.js"
 },
   "author": "",
   "license": "ISC",

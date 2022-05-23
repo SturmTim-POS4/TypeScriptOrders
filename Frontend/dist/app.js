@@ -45,16 +45,30 @@ exports.OrderDetailDto = OrderDetailDto;
 },{}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProductDto = void 0;
+var ProductDto = /** @class */ (function () {
+    function ProductDto(productId, productName) {
+        this.productId = productId;
+        this.productName = productName;
+    }
+    return ProductDto;
+}());
+exports.ProductDto = ProductDto;
+},{}],5:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var baseURL = 'http://localhost:5000/';
 $(function () {
-    console.log("Hi");
+    $('#divAdd').hide();
+    $('#btnAddOrderDetail').click(addOrderDetail);
     getLetters();
+    getProducts();
 });
 function fillCustomers(letter) {
     $.getJSON("".concat(baseURL, "api/customer"))
         .then(function (customers) {
         customers.filter(function (x) { return x.contactName.substring(0, 1) == letter; }).forEach(function (x) {
-            $("#lstCustomer".concat(letter)).append($("<li>").html(x.contactName).click(function () {
+            $("#lstCustomer".concat(letter)).append($("<li>").html(x.contactName).addClass("hoverColor").click(function () {
                 getOrders(x.customerId);
             }));
         });
@@ -89,6 +103,14 @@ function getLetters() {
         });
     });
 }
+function getProducts() {
+    $.getJSON("".concat(baseURL, "api/product"))
+        .then(function (products) {
+        products.forEach(function (x) {
+            $('#cbProduct').append($("<option>").html(x.productName).val(x.productId));
+        });
+    });
+}
 function getOrders(customerId) {
     $('#lblOrderTitle').html("Order of ".concat(customerId));
     $('#tblOrders').empty().append("<th>OrderDate</th>\n" +
@@ -100,7 +122,8 @@ function getOrders(customerId) {
         .then(function (orders) {
         orders.forEach(function (x) {
             var trOrder = $("<tr>");
-            trOrder.addClass("hoverColor");
+            trOrder.addClass("hoverColor").addClass("order");
+            trOrder.val(x.orderId);
             trOrder.append($("<td>").html(x.orderDate.substring(0, 10)));
             trOrder.append($("<td>").html(x.employeeName));
             trOrder.append($("<td>").html(x.shippedDate.substring(0, 10)));
@@ -108,6 +131,9 @@ function getOrders(customerId) {
             trOrder.append($("<td>").html(x.shipName));
             trOrder.click(function () {
                 getOrderDetails(x.orderId);
+                var activeOrder = $(".order.active");
+                activeOrder.removeClass("active");
+                trOrder.addClass("active");
             });
             $('#tblOrders').append(trOrder);
         });
@@ -132,14 +158,14 @@ function getOrderDetails(orderId) {
             trOrderDetail.append($("<td>").html("".concat(x.price, " \u20AC")));
             totalPrice += x.price;
             var btnDelete = $("<button>");
-            btnDelete.html("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-trash\" viewBox=\"0 0 16 16\"> <path d=\"M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z\"/> <path fill-rule=\"evenodd\" d=\"M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z\"/> </svg>");
+            btnDelete.html("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-trash\" viewBox=\"0 0 16 16\"> " +
+                "<path fill-rule=\"evenodd\" d=\"M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z\"/> </svg>");
             btnDelete.click(function () {
                 var orderId = x.orderId;
-                var productId = x.productId;
                 $.ajax({
-                    url: "".concat(baseURL, "api/OrderDetail/").concat(orderId, "/").concat(productId),
+                    url: "".concat(baseURL, "api/OrderDetail/").concat(orderId, "/").concat((x.productId)),
                     type: "delete"
-                }).then(function (x) { return getOrderDetails(orderId); });
+                }).then(function () { return getOrderDetails(orderId); });
             });
             trOrderDetail.append($("<td>").append(btnDelete));
             $('#tblOrderDetails').append(trOrderDetail);
@@ -147,8 +173,32 @@ function getOrderDetails(orderId) {
         var trTotal = $("<tr>");
         trTotal.append($("<td colspan='3'>").html("Total"));
         trTotal.append($("<td>").html("".concat(totalPrice, " \u20AC")));
-        trTotal.append($("<td>"));
+        var buttonAdd = $("<button>");
+        buttonAdd.html("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-trash\" viewBox=\"0 0 16 16\"> " +
+            "<path fill-rule=\"evenodd\" d=\"M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM8.5 8a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V12a.5.5 0 0 0 1 0v-1.5H10a.5.5 0 0 0 0-1H8.5V8z\"/>\n" +
+            "</svg>");
+        buttonAdd.click(function () {
+            $('#divAdd').show();
+        });
+        trTotal.append($("<td>").append(buttonAdd));
         $('#tblOrderDetails').append(trTotal);
     });
 }
-},{}]},{},[4,2,3,1]);
+function addOrderDetail() {
+    var orderId = $(".order.active").val();
+    var productId = $("#cbProduct option:selected").val();
+    var quantity = $('#ipQuantity').val();
+    var data = {
+        "orderId": orderId,
+        "productId": productId,
+        "quantity": quantity
+    };
+    $.ajax({
+        url: "".concat(baseURL, "api/OrderDetail"),
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json'
+    })
+        .then(function () { return getOrderDetails(Number(orderId)); });
+}
+},{}]},{},[5,2,3,1,4]);

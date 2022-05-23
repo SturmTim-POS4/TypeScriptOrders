@@ -6,6 +6,10 @@ h3, h1{
     text-align: center;
 }
 
+.gap{
+    gap: 5px;
+}
+
 .row{
     flex-direction: row;
     display: flex
@@ -23,5 +27,5 @@ h3, h1{
 }
 
 .lbl-letter.active {
-    background-color: #e39501;
+
 }
