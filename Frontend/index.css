@@ -18,6 +18,10 @@ h3, h1{
 .grow{
     flex-grow: 10;
 }
-.tr-rows:hover{
+.hoverColor:hover{
     background-color: #ffa500;
+}
+
+.lbl-letter.active {
+    background-color: #e39501;
 }
