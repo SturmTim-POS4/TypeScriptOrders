@@ -159,5 +159,8 @@ function addOrderDetail() {
         data: JSON.stringify(data),
         contentType: 'application/json'
     })
-        .then(() => getOrderDetails(Number(orderId)));
+        .then(() => {
+            getOrderDetails(Number(orderId))
+            $('#divAdd').hide()
+        });
 }

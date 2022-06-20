@@ -199,6 +199,9 @@ function addOrderDetail() {
         data: JSON.stringify(data),
         contentType: 'application/json'
     })
-        .then(function () { return getOrderDetails(Number(orderId)); });
+        .then(function () {
+        getOrderDetails(Number(orderId));
+        $('#divAdd').hide();
+    });
 }
 },{}]},{},[5,2,3,1,4]);
